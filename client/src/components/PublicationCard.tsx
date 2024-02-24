@@ -1,0 +1,61 @@
+import React from "react";
+import { MdOutlineKeyboardArrowRight, MdFileDownload } from "react-icons/md";
+import Link from "next/link";
+
+interface PublicCardInterface {
+  id: number;
+  randomNames: string[];
+  date: string;
+  title: string;
+  desc: string;
+  subtitle: string;
+}
+
+interface PublicationCardProps {
+  data: PublicCardInterface;
+}
+
+const PublicationCard = ({ data }: PublicationCardProps) => {
+  const truncateDescription = (description: string, maxLength: number) => {
+    if (description.length > maxLength) {
+      return description.substring(0, maxLength) + "...";
+    }
+    return description;
+  };
+  return (
+    <Link
+      href={`/publication/${data.id}`}
+      className="p-4 bg-[#fff] rounded-md flex flex-col">
+      <div className="flex justify-between">
+        <h3 className="text-2xl text-primaryColor max-w-xl mb-2">
+          {data.title}
+        </h3>
+        <h4>{data.date}</h4>
+      </div>
+      <p className="mb-2">
+        {data.randomNames.map((list, index) => (
+          <span key={index}>{index > 0 ? `, ${list}` : list}</span>
+        ))}
+      </p>
+      <p>{truncateDescription(data.desc, 100)}</p>
+      <div className="flex justify-between">
+        <button className="flex gap-2 items-center border border-solid border-[#ccc] px-[8px] mt-4">
+          <span>
+            <MdFileDownload />
+          </span>{" "}
+          Preuzmi PDF
+        </button>
+        <Link
+          href={`/publication/${data.id}`}
+          className="flex gap-2 items-center">
+          Vidi više{" "}
+          <span>
+            <MdOutlineKeyboardArrowRight />
+          </span>
+        </Link>
+      </div>
+    </Link>
+  );
+};
+
+export default PublicationCard;

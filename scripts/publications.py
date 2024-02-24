@@ -1,28 +1,37 @@
 import mysql.connector
 from bs4 import BeautifulSoup
 import re
+import os
+from dotenv import load_dotenv
 import requests
 import json
 
+load_dotenv()
+
 connection = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="bhai"
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_DATABASE")
 )
 
 cursor = connection.cursor()
 
-def insert_publication(title, authors, description, date, cite_number, pdf_link, publication_id, categories):
+def insert_publication(title, subtitle, authors, description, date, cite_number, pdf_link, publication_id, categories):
     insert_query = """
-        INSERT INTO publications (title, authors, description, date, cite_number, pdf_source, publication_id, categories)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO publications (title, subtitle, authors, description, date, cite_number, pdf_source, publication_id, categories)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
-    data = (title, authors, description, date, cite_number, pdf_link, publication_id, json.dumps(categories))
+    data = (title, subtitle, authors, description, date, cite_number, pdf_link, publication_id, json.dumps(categories))
     cursor.execute(insert_query, data)
     connection.commit()
     print(f"Publication inserted into the database: {title}")
     print("=" * 50)
+
+def scrape_subtitle(publication):
+    subtitle_element = publication.find('div', class_='col-12 col-sm')
+    subtitle = subtitle_element.text.strip() if subtitle_element else ""
+    return subtitle
 
 def scrape_page(url):
     response = requests.get(url)
@@ -58,6 +67,8 @@ def scrape_page(url):
                 pdf_link = pdf_link_element['href'] if pdf_link_element else "N/A"
 
                 publication_url = title_element['href']
+                subtitle = scrape_subtitle(publication)
+
                 publication_soup = scrape_publication(publication_url)
                 category_element = publication_soup.select_one('.main.nav .btn-custom.noclick')
 
@@ -70,9 +81,7 @@ def scrape_page(url):
                     else:
                         category = "N/A"
 
-                print(category)
-
-                insert_publication(title, authors, description, date, cite_number, pdf_link, publication_id, [category])
+                insert_publication(title, subtitle, authors, description, date, cite_number, pdf_link, publication_id, [category])
 
     return soup 
 

@@ -1,5 +1,9 @@
 from openai import OpenAI
+import os
+from dotenv import load_dotenv
 import mysql.connector
+
+load_dotenv()
 
 client = OpenAI(api_key="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")
 
@@ -20,6 +24,10 @@ db_connection = mysql.connector.connect(
     user="root",
     password="",
     database="bhai"
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_DATABASE")
 )
 
 cursor = db_connection.cursor(dictionary=True)

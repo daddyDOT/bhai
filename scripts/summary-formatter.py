@@ -1,5 +1,9 @@
 from openai import OpenAI
+import os
+from dotenv import load_dotenv
 import mysql.connector
+
+load_dotenv()
 
 client = OpenAI(api_key="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")
 
@@ -29,7 +33,6 @@ cursor.execute("SELECT * FROM publications WHERE bionic_description IS NULL OR b
 publications = cursor.fetchall()
 
 for publication in publications:
-        print("a")
         formatted_description = format_description(publication["description"])
 
         update_query = "UPDATE publications SET description = %s WHERE id = %s"
