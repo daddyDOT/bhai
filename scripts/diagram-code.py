@@ -22,16 +22,16 @@ db_connection = mysql.connector.connect(
 
 cursor = db_connection.cursor(dictionary=True)
 
-cursor.execute("SELECT * FROM publications")
+cursor.execute("SELECT * FROM publications WHERE mermaid_code IS NULL OR mermaid_code = ''")
 publications = cursor.fetchall()
 
 for publication in publications:
-    if not publication["mermaid_code"] and publication["description"]:
-        mermaid_code = generate_mermaid_code(publication["description"])
+  if not publication["mermaid_code"] and publication["description"]:
+      mermaid_code = generate_mermaid_code(publication["description"])
 
-        update_query = "UPDATE publications SET mermaid_code = %s WHERE id = %s"
-        cursor.execute(update_query, (mermaid_code, publication["id"]))
-        db_connection.commit()
+      update_query = "UPDATE publications SET mermaid_code = %s WHERE id = %s"
+      cursor.execute(update_query, (mermaid_code, publication["id"]))
+      db_connection.commit()
 
 cursor.close()
 db_connection.close()
