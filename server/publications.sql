@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 24, 2024 at 03:23 PM
+-- Generation Time: Feb 24, 2024 at 03:47 PM
 -- Server version: 10.6.12-MariaDB-0ubuntu0.22.04.1
 -- PHP Version: 8.1.2-1ubuntu2.14
 
@@ -37,7 +37,8 @@ CREATE TABLE `publications` (
   `bionic_description` text DEFAULT NULL,
   `pdf_source` text DEFAULT NULL,
   `publication_id` text DEFAULT NULL,
-  `categories` text DEFAULT NULL
+  `categories` text DEFAULT NULL,
+  `mermaid_code` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
