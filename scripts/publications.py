@@ -17,12 +17,12 @@ connection = mysql.connector.connect(
 
 cursor = connection.cursor()
 
-def insert_publication(title, subtitle, authors, description, date, cite_number, pdf_link, publication_id, categories):
+def insert_publication(title, subtitle, authors, short_description, description, date, cite_number, pdf_link, publication_id, categories):
     insert_query = """
-        INSERT INTO publications (title, subtitle, authors, description, date, cite_number, pdf_source, publication_id, categories)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO publications (title, subtitle, authors, short_description, description, date, cite_number, pdf_source, publication_id, categories)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
-    data = (title, subtitle, authors, description, date, cite_number, pdf_link, publication_id, json.dumps(categories))
+    data = (title, subtitle, authors, short_description, description, date, cite_number, pdf_link, publication_id, json.dumps(categories))
     cursor.execute(insert_query, data)
     connection.commit()
     print(f"Publication inserted into the database: {title}")
@@ -57,6 +57,8 @@ def scrape_page(url):
                 description_element = publication.find('p', class_='card-short-description')
                 description = description_element.text.strip()
 
+                short_description = description
+
                 date_element = publication.find('div', class_='card-date')
                 date = date_element.text.strip()
 
@@ -81,7 +83,7 @@ def scrape_page(url):
                     else:
                         category = "N/A"
 
-                insert_publication(title, subtitle, authors, description, date, cite_number, pdf_link, publication_id, [category])
+                insert_publication(title, subtitle, authors, short_description, description, date, cite_number, pdf_link, publication_id, [category])
 
     return soup 
 
