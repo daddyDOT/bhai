@@ -5,16 +5,16 @@ import mysql.connector
 
 load_dotenv()
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
 
 def format_description(description):
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "\
-             Given a summary of a research paper, format the content using Markdown language. \
-             Format it by headings and texts in that related to that headings.\
-             Provide the formatted Markdown code but without ```mermaid ```, just content inside."},
+            Given a summary of a research paper, format the content using Markdown language. \
+            Format it by headings and texts in that related to that headings.\
+            Provide the formatted Markdown code but without ```mermaid ```, just content inside."},
             {"role": "user", "content": f"{description}"}
         ]
     )
