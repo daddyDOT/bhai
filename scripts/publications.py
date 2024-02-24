@@ -1,14 +1,18 @@
 import mysql.connector
 from bs4 import BeautifulSoup
 import re
+import os
+from dotenv import load_dotenv
 import requests
 import json
 
+load_dotenv()
+
 connection = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="bh_ai"
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_DATABASE")
 )
 
 cursor = connection.cursor()
@@ -69,8 +73,6 @@ def scrape_page(url):
                         category = category_element_main.text.strip()
                     else:
                         category = "N/A"
-
-                print(category)
 
                 insert_publication(title, authors, description, date, cite_number, pdf_link, publication_id, [category])
 
