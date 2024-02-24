@@ -3,11 +3,11 @@ import Link from "next/link";
 
 const NavBar = () => {
   return (
-    <header className="sticky bg-white top-0 z-50 h-16 lg:h-[8.5rem] w-full flex flex-col border-solid border-b-[1px]">
+    <header className="sticky bg-white top-0 z-50 h-16 lg:h-[8.5rem] w-full flex flex-col border-solid border-b-[1px] container px-8 lg:px-16">
       <div className="flex items-center justify-center lg:h-[60%]">
         <div className="max-w-[1330px] h-full w-full p-3 flex items-center justify-between lg:gap-20">
           <img
-            src={"./ai_logo_color.svg"}
+            src="./ai_logo_color.svg"
             alt="logo"
             className="hidden lg:block"
           />
