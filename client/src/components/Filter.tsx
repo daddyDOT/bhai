@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Select, SelectItem } from "@nextui-org/react";
-import { animals } from "@/app/utils/data";
+import { names } from "@/app/utils/data";
 import { CiFilter } from "react-icons/ci";
 import { FaRegCircle } from "react-icons/fa";
 
@@ -41,9 +41,9 @@ const Filter = () => {
             Uključeni istraživači
           </h3>
           <Select label="Izaberite istraživača" className="mt-4 mb-4">
-            {animals.map((animal) => (
-              <SelectItem key={animal.value} value={animal.value}>
-                {animal.label}
+            {names.map((name) => (
+              <SelectItem key={name.value} value={name.value}>
+                {name.label}
               </SelectItem>
             ))}
           </Select>
