@@ -1,10 +1,15 @@
-"use client"
-
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import {NextUIProvider} from "@nextui-org/react";
 import NavBar from "@/components/NavBar";
+import { Providers } from "./utils/Provider";
+
 const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "Akademski imenik",
+  description: "Akademski imenik",
+};
 
 export default function RootLayout({
   children,
@@ -14,11 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <NextUIProvider>
-        <NavBar />
-        {children}
-        </NextUIProvider>
-        </body>
+        <Providers>
+          <NavBar />
+          {children}
+        </Providers>
+      </body>
     </html>
   );
 }
