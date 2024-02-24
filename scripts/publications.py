@@ -84,7 +84,6 @@ def scrape_publication(url):
     else:
         return None
 
-# URL of the first page
 url = "https://akademskiimenik.ba/publikacije?page=1"
 
 max_pages = 1
