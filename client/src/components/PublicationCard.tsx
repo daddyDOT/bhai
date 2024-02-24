@@ -23,7 +23,9 @@ const PublicationCard = ({ data }: PublicationCardProps) => {
     return description;
   };
   return (
-    <div className="p-4 bg-[#fff] rounded-md flex flex-col">
+    <Link
+      href={`/publication/${data.id}`}
+      className="p-4 bg-[#fff] rounded-md flex flex-col">
       <div className="flex justify-between">
         <h3 className="text-2xl text-primaryColor max-w-xl mb-2">
           {data.title}
@@ -52,7 +54,7 @@ const PublicationCard = ({ data }: PublicationCardProps) => {
           </span>
         </Link>
       </div>
-    </div>
+    </Link>
   );
 };
 

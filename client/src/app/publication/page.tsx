@@ -31,8 +31,8 @@ const page = () => {
           <div className="col-span-2">
             <div className="flex flex-col gap-4">
               <Sort />
-              {publicCard.map((data) => (
-                <PublicationCard data={data} />
+              {publicCard.map((data, i) => (
+                <PublicationCard data={data} key={i} />
               ))}
             </div>
           </div>

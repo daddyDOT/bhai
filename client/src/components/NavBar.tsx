@@ -7,7 +7,7 @@ const NavBar = () => {
       <div className="flex items-center justify-center lg:h-[60%]">
         <div className="max-w-[1330px] h-full w-full p-3 flex items-center justify-between lg:gap-20">
           <img
-            src={"./ai_logo_color.svg"}
+            src="./ai_logo_color.svg"
             alt="logo"
             className="hidden lg:block"
           />
