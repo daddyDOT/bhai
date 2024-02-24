@@ -20,10 +20,6 @@ Only provide code, don't give any comments. JUST CODE. Ensure that the generated
     return response.choices[0].message.content
 
 db_connection = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="bhai"
     host=os.getenv("DB_HOST"),
     user=os.getenv("DB_USER"),
     password=os.getenv("DB_PASSWORD"),
