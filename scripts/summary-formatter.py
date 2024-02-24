@@ -1,5 +1,9 @@
 from openai import OpenAI
+import os
+from dotenv import load_dotenv
 import mysql.connector
+
+load_dotenv()
 
 client = OpenAI(api_key="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")
 
@@ -17,10 +21,10 @@ def format_description(description):
     return response.choices[0].message.content
 
 db_connection = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="root",
-    database="bhaaas"
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_DATABASE")
 )
 
 cursor = db_connection.cursor(dictionary=True)
@@ -29,7 +33,6 @@ cursor.execute("SELECT * FROM publications WHERE bionic_description IS NULL OR b
 publications = cursor.fetchall()
 
 for publication in publications:
-        print("a")
         formatted_description = format_description(publication["description"])
 
         update_query = "UPDATE publications SET description = %s WHERE id = %s"
