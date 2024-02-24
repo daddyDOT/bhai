@@ -29,7 +29,13 @@ app.get('/api/data', (req, res) => {
 
 app.get('/api/data/:publication_id', (req, res) => {
   const publicationId = req.params.publication_id;
-  const query = 'SELECT * FROM `publications` WHERE `publication_id` = ?';
+  const query = `
+    SELECT * 
+    FROM publications 
+    LEFT JOIN translations ON translations.publication_id = publications.id 
+    WHERE publications.publication_id = ?
+  `;
+
   connection.query(query, [publicationId], (error, results) => {
     if (error) {
       console.error(error);
@@ -40,9 +46,38 @@ app.get('/api/data/:publication_id', (req, res) => {
       res.status(404).json({ error: 'Publication not found' });
       return;
     }
-    res.status(200).json(results[0]);
+
+    // Group translations by language
+    const groupedTranslations = results.reduce((acc, curr) => {
+      const language = curr.language;
+      if (!acc[language]) {
+        acc[language] = [];
+      }
+      acc[language].push({ content: curr.content });
+      return acc;
+    }, {});
+
+    // Combine main publication details with grouped translations
+    const mainPublication = {
+      id: results[0].id,
+      title: results[0].title,
+      authors: results[0].authors,
+      description: results[0].description,
+      date: results[0].date,
+      cite_number: results[0].cite_number,
+      bionic_description: results[0].bionic_description,
+      pdf_source: results[0].pdf_source,
+      publication_id: results[0].publication_id,
+      categories: results[0].categories,
+      mermaid_code: results[0].mermaid_code,
+      languages: Object.keys(groupedTranslations),
+      translations: groupedTranslations
+    };
+
+    res.status(200).json(mainPublication);
   });
 });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
