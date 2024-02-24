@@ -18,8 +18,8 @@ Only provide code, don't give any comments. JUST CODE. Ensure that the generated
 db_connection = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="root",
-    database="bhaaas"
+    password="",
+    database="bhai"
 )
 
 cursor = db_connection.cursor(dictionary=True)

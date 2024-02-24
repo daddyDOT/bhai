@@ -1,3 +1,3 @@
-python3 publications.py
-python3 diagram-code.py
-python3 summary-formatter.py
+python publications.py
+python diagram-code.py
+python summary-formatter.py
