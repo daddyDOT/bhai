@@ -83,13 +83,16 @@ app.get("/api/data/:publication_id", (req, res) => {
   });
 });
 
-
 app.get("/api/audio/:language/:publication_id", (req, res) => {
   const language = req.params.language;
   const publicationId = req.params.publication_id;
 
-  const filePath = path.join(__dirname, `../data/audio-${language}/`, `${publicationId}.mp3`);
-  console.log(filePath)
+  const filePath = path.join(
+    __dirname,
+    `../data/audio-${language}/`,
+    `${publicationId}.mp3`
+  );
+  console.log(filePath);
   res.sendFile(filePath, (err) => {
     if (err) {
       res.status(404).send("File not found");
@@ -226,6 +229,56 @@ app.get("/api/suggested/publications/:publication_id", async (req, res) => {
     );
   } catch (error) {
     console.log(error);
+    return res.status(500).send("Internal server error.");
+  }
+});
+
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
+
+app.get("/api/suggested/authors/:publication_id", async (req, res) => {
+  const publicationId = req.params.publication_id;
+
+  try {
+    connection.query(
+      "SELECT categories FROM publications WHERE publication_id = ?",
+      [publicationId],
+      (err, results) => {
+        if (err) {
+          return res.status(500).send("Internal server error.");
+        }
+
+        if (results.length === 0) {
+          return res.status(404).send("Publication not found.");
+        }
+
+        const categories = JSON.parse(results[0].categories || "[]");
+
+        connection.query(
+          "SELECT * FROM authors WHERE category IN (?) LIMIT 10",
+          [categories],
+          (err, data) => {
+            if (err) {
+              return res.status(500).send("Internal server error.");
+            }
+
+            if (data.length > 0) {
+              const shuffledAuthors = shuffleArray(data).slice(0, 10);
+
+              res.status(200).json(shuffledAuthors);
+            } else {
+              res.status(404).send("No related authors found.");
+            }
+          }
+        );
+      }
+    );
+  } catch (error) {
     return res.status(500).send("Internal server error.");
   }
 });
