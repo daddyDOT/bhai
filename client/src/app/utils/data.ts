@@ -63,11 +63,13 @@ export interface PublicCardInterface {
   date: string;
   title: string;
   description: string;
+  short_description: string;
   subtitle: string;
   publication_id: string;
   languages: string[];
   bionic_description: string;
   mermaid_code: string;
+  pdf_source: string;
   translations: {
     Bosnian?: Translation[];
     German?: Translation[];
