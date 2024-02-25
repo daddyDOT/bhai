@@ -6,6 +6,9 @@ import Subscribe from "@/components/Subscribe";
 import Footer from "@/components/Footer";
 import { Providers } from "./utils/Provider";
 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
