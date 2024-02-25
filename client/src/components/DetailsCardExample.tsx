@@ -11,7 +11,8 @@ import { Select, SelectItem, Avatar } from "@nextui-org/react";
 import { PublicCardInterface } from "@/app/utils/data";
 import { useEffect } from "react";
 import mermaid from "mermaid";
-import MarkdownPreview from '@uiw/react-markdown-preview';
+import MarkdownPreview from "@uiw/react-markdown-preview";
+import { GiSpeaker } from "react-icons/gi";
 
 interface ItemCardProps {
   data: PublicCardInterface | undefined;
@@ -23,14 +24,26 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
     mermaid.init(undefined, document.querySelectorAll(".mermaid"));
   }, []);
   const [isVisible, setIsVisible] = useState(false);
+  let readingTime;
 
   const handleVisible = () => {
     setIsVisible(!isVisible);
   };
   let result;
-  if (isVisible && data)
-  {
+  if (isVisible && data) {
     result = data.bionic_description.split("\\n\\n");
+  }
+
+  function calculateReadingTime(text: string) {
+    const wordsPerMinute = 200;
+    const wordCount = text.split(/\s+/).length;
+    const readingTime = wordCount / wordsPerMinute;
+    const roundedReadingTime = Math.ceil(readingTime);
+
+    return roundedReadingTime;
+  }
+  if (data?.description) {
+    readingTime = calculateReadingTime(data?.description);
   }
 
   return (
@@ -40,7 +53,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
         <h4 className="font-bold text-[#777] pt-2">{data?.subtitle}</h4>
       </div>
       <div className="flex justify-center items-center flex-col">
-        <div className="mt-4 w-[900px]">
+        <div className="mt-6 mb-6 w-[1000px]">
           {data?.mermaid_code ? (
             <Mermaid className="mermaid" chart={data?.mermaid_code} />
           ) : (
@@ -63,21 +76,20 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
               <span className="font-light">
                 <FaRegClock />
               </span>{" "}
-              33 min
+              {readingTime} min
             </h4>
           </div>
         </div>
       </div>
 
       <div className="flex justify-between items-center mt-12">
-        <h3 className="text-xl font-bold text-primaryColor">Description</h3>
-        <div className="flex gap-8 justify-end items-center w-full">
-          <div>
-            <Switch defaultSelected color="default">
-              Bionic Reading
-            </Switch>
-          </div>
-          <div className="w-[20%]">
+        <div className="w-full">
+          <Switch color="default" onChange={handleVisible}>
+            Bionic Reading
+          </Switch>
+        </div>
+        <div className="flex gap-16 justify-end items-center w-full">
+          <div className="w-[50%]">
             <Select
               placeholder="Select a language"
               variant="underlined"
@@ -107,31 +119,24 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
             </Select>
           </div>
           <div>
-            {isVisible ? (
-              <span
-                onClick={handleVisible}
-                className="cursor-pointer pt-3 text-2xl">
-                <FaRegEye />
-              </span>
-            ) : (
-              <span
-                onClick={handleVisible}
-                className="cursor-pointer pt-3 text-2xl">
-                <FaRegEyeSlash />
-              </span>
-            )}
+            <span className="cursor-pointer pt-3 text-3xl">
+              <GiSpeaker />
+            </span>
           </div>
         </div>
       </div>
-      <hr className="mt-2" />
-      {isVisible && result ? result.map((res, i) => (
-        <div key={i}>
-          <MarkdownPreview source={res} />
-          <br />
-          <br />
-        </div>
-      )) :
-      <MarkdownPreview source={data?.description} />}
+      <hr className="mt-4 mb-8" />
+      {isVisible && result ? (
+        result.map((res, i) => (
+          <div key={i}>
+            <MarkdownPreview source={res} />
+            <br />
+            <br />
+          </div>
+        ))
+      ) : (
+        <MarkdownPreview source={data?.description} />
+      )}
     </div>
   );
 };
