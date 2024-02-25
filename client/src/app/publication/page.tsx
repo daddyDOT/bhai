@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { SlArrowLeft } from "react-icons/sl";
@@ -5,8 +7,27 @@ import Filter from "@/components/Filter";
 import Sort from "@/components/Sort";
 import PublicationCard from "@/components/PublicationCard";
 import { publicCard } from "../utils/data";
+import { useEffect, useState } from "react";
+import { PublicCardInterface } from "../utils/data";
 
 const page = () => {
+  const [data, setData] = useState<PublicCardInterface[] | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    const fetchALlPublications = async () => {
+      const res = await fetch("http://localhost:5000/api/data");
+      const data = await res.json();
+
+      console.log(data);
+
+      setData(data);
+    };
+
+    fetchALlPublications();
+  }, []);
+
   return (
     <section
       id="publication"
@@ -31,7 +52,7 @@ const page = () => {
           <div className="col-span-2">
             <div className="flex flex-col gap-4">
               <Sort />
-              {publicCard.map((data, i) => (
+              {data?.map((data, i) => (
                 <PublicationCard data={data} key={i} />
               ))}
             </div>

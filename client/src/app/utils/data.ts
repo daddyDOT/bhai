@@ -52,4 +52,16 @@ export const detailCardData = {
     title: "Comparison of mechanical and microstructure properties of tungsten alloys for special purposes",
     desc: "Tungsten belongs to group of refractory metal that possess extraordinary resistance to heat and wear and it is the heaviest engineering material. Because of its properties tungsten is used for special purposes. This paper presents the results of mechanical and microstructure research on the example of the characteristic heavy tungsten alloys 91W-6Ni-1.8Fe-1Co and 93W-5Ni-1.6Fe-0.3Co with different Ni/Co ratios. The proper Ni/Co ratio is important to obtain a favorable microstructure and mechanical properties of these materials. The distribution of the W, Ni, Co and Fe elements in tungsten phase and binder phase, which can influence on mechanical properties of tungsten alloys. The SEM analysis and mechanical results show that the alloy, which has Ni/Co within the given limits,  posses a finer microstructure and better mechanical properties that is very important for the maintenance of the quality of tungsten alloys for special purposes.",
     subtitle: "Sustainable Engineering and Innovation"
-  }
+}
+
+export interface PublicCardInterface {
+  id: number;
+  authors: string;
+  date: string;
+  title: string;
+  description: string;
+  subtitle: string;
+  publication_id: string;
+  bionic_description: string,
+  mermaid_code: string
+}
