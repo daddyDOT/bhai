@@ -137,7 +137,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
       </div>
 
       <div className="flex justify-between items-center mt-12">
-        <div className="w-full">
+        <div className="w-full text-3xl">
           {currentLanguage === "English" && (
             <Switch color="primary" onChange={handleVisible}>
               Bionic Reading
@@ -182,7 +182,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
               }
             </Select>
           </div>
-          <div onClick={isPlaying ? stopAudio : playAudio} >
+          <div onClick={isPlaying ? stopAudio : playAudio}>
             <span className="cursor-pointer pt-3 text-3xl">
               {isPlaying ? <IoIosPause /> : <IoIosPlay />}
             </span>
