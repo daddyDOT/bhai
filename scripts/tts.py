@@ -1,15 +1,12 @@
 import os
 import mysql.connector
-import openai
-from openai import OpenAI
 from pathlib import Path
 from dotenv import load_dotenv
 import json
 
 load_dotenv()
 
-# Initialize the OpenAI client
-client = openai.OpenAI(api_key='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')
+
 
 # Database connection setup
 connection = mysql.connector.connect(
