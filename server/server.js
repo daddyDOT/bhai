@@ -1,33 +1,34 @@
-const express = require('express');
-const mysql = require('mysql');
-const cors = require('cors');
+const express = require("express");
+const mysql = require("mysql");
+const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
 app.use(cors());
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'bhaaas'
+  host: "localhost",
+  user: "root",
+  password: "root",
+  database: "bhaaas",
 });
 
 connection.connect();
 
-app.get('/api/data', (req, res) => {
-  const query = 'SELECT * FROM publications';
+app.get("/api/data", (req, res) => {
+  const query = "SELECT * FROM publications";
   connection.query(query, (error, results) => {
     if (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
       return;
     }
     res.status(200).json(results);
   });
 });
 
-app.get('/api/data/:publication_id', (req, res) => {
+app.get("/api/data/:publication_id", (req, res) => {
   const publicationId = req.params.publication_id;
   const query = `
     SELECT * 
@@ -39,11 +40,11 @@ app.get('/api/data/:publication_id', (req, res) => {
   connection.query(query, [publicationId], (error, results) => {
     if (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
       return;
     }
     if (results.length === 0) {
-      res.status(404).json({ error: 'Publication not found' });
+      res.status(404).json({ error: "Publication not found" });
       return;
     }
 
@@ -71,13 +72,27 @@ app.get('/api/data/:publication_id', (req, res) => {
       categories: results[0].categories,
       mermaid_code: results[0].mermaid_code,
       languages: Object.keys(groupedTranslations),
-      translations: groupedTranslations
+      translations: groupedTranslations,
     };
 
     res.status(200).json(mainPublication);
   });
 });
 
+const basePath = "../data/audio/";
+
+app.get("/api/audio/:language/:publication_id", (req, res) => {
+  const language = req.params.language;
+  const publicationId = req.params.publication_id;
+
+  const filePath = path.join(__dirname, basePath, `${publicationId}.mp3`);
+
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      res.status(404).send("File not found");
+    }
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

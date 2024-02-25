@@ -100,7 +100,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
                   <Avatar
                     alt="English"
                     className="w-6 h-6"
-                    src="https://flagpedia.net/data/flags/w702/gb-eng.webp"
+                    src="https://flagpedia.net/data/flags/w702/us.webp"
                   />
                 }>
                 English
@@ -116,12 +116,36 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
                 }>
                 Bosnian
               </SelectItem>
+              <SelectItem
+                key="german"
+                startContent={
+                  <Avatar
+                    alt="German"
+                    className="w-6 h-6"
+                    src="https://flagpedia.net/data/flags/w702/de.webp"
+                  />
+                }>
+                German
+              </SelectItem>
             </Select>
           </div>
           <div>
             <span className="cursor-pointer pt-3 text-3xl">
               <GiSpeaker />
             </span>
+            {isVisible ? (
+              <span
+                onClick={handleVisible}
+                className="cursor-pointer pt-3 text-2xl">
+                <FaRegEye />
+              </span>
+            ) : (
+              <span
+                onClick={handleVisible}
+                className="cursor-pointer pt-3 text-2xl">
+                <FaRegEyeSlash />
+              </span>
+            )}
           </div>
         </div>
       </div>
