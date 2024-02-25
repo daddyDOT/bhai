@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Switch } from "@nextui-org/react";
 import { CiCalendar } from "react-icons/ci";
 import { FaRegClock } from "react-icons/fa6";
+//@ts-ignore
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import { Select, SelectItem, Avatar } from "@nextui-org/react";
 import { PublicCardInterface } from "@/app/utils/data";
