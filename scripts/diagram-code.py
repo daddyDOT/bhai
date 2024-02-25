@@ -33,7 +33,7 @@ publications = cursor.fetchall()
 
 for publication in publications:
     if not publication["mermaid_code"] and publication["description"]:
-        mermaid_code = generate_mermaid_code(publication["description"])
+        mermaid_code = generate_mermaid_code(publication["description"])[10:-3]
 
         update_query = "UPDATE publications SET mermaid_code = %s WHERE id = %s"
         cursor.execute(update_query, (mermaid_code, publication["id"]))
