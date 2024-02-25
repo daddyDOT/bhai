@@ -10,7 +10,7 @@ import { PublicCardInterface } from "@/app/utils/data";
 import { useEffect } from "react";
 import mermaid from "mermaid";
 import MarkdownPreview from "@uiw/react-markdown-preview";
-import { GiSpeaker } from "react-icons/gi";
+import { GiSpeaker, GiSpeakerOff } from "react-icons/gi";
 
 interface ItemCardProps {
   data: PublicCardInterface | undefined;
@@ -18,6 +18,8 @@ interface ItemCardProps {
 
 const DetailCardExample = ({ data }: ItemCardProps) => {
   const [currentLanguage, setCurrentLanguage] = useState("English");
+  const [audioSrc, setAudioSrc] = useState("");
+  const [playingTranslation, setPlayingTranslation] = useState(false);
 
   useEffect(() => {
     mermaid.initialize({ startOnLoad: true });
@@ -29,6 +31,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
   const handleVisible = () => {
     setIsVisible(!isVisible);
   };
+
   let result;
   if (isVisible && data) {
     result = data.bionic_description.split("\\n\\n");
@@ -47,6 +50,31 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
   }
 
   console.log(data);
+  console.log(playingTranslation);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/audio/${currentLanguage}/${data?.publication_id}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        setAudioSrc(blobUrl);
+      } catch (error) {
+        console.error("Error fetching audio:", error);
+      }
+    };
+
+    if (data) {
+      fetchData();
+    }
+  }, [data, currentLanguage, data?.publication_id]);
 
   const handleCountrySelect = (e: any) => {
     console.log("Changed");
@@ -54,6 +82,13 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
 
   return (
     <div className="p-6 bg-[#fff] rounded-md flex flex-col mt-8">
+      {data && (
+        <audio
+          autoPlay={false}
+          muted={!playingTranslation}
+          src={audioSrc}
+        ></audio>
+      )}
       <div className="flex flex-col text-center">
         <h3 className="font-bold text-2xl text-primaryColor">{data?.title}</h3>
         <h4 className="font-bold text-[#777] pt-2">{data?.subtitle}</h4>
@@ -102,7 +137,8 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
               placeholder="Select a language"
               variant="underlined"
               labelPlacement="outside"
-              onChange={handleCountrySelect}>
+              onChange={handleCountrySelect}
+            >
               <SelectItem
                 key="English"
                 onClick={() => setCurrentLanguage("English")}
@@ -112,7 +148,8 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
                     className="w-6 h-6"
                     src={`/English.webp`}
                   />
-                }>
+                }
+              >
                 English
               </SelectItem>
               {
@@ -127,7 +164,8 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
                           className="w-6 h-6"
                           src={`/${language}.webp`}
                         />
-                      }>
+                      }
+                    >
                       {language}
                     </SelectItem>
                   ) : null
@@ -135,9 +173,9 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
               }
             </Select>
           </div>
-          <div>
+          <div onClick={() => setPlayingTranslation(!playingTranslation)}>
             <span className="cursor-pointer pt-3 text-3xl">
-              <GiSpeaker />
+              {!playingTranslation ? <GiSpeaker /> : <GiSpeakerOff />}
             </span>
           </div>
         </div>

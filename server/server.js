@@ -68,7 +68,7 @@ app.get("/api/data/:publication_id", (req, res) => {
       cite_number: results[0].cite_number,
       bionic_description: results[0].bionic_description,
       pdf_source: results[0].pdf_source,
-      publication_id: results[0].publication_id,
+      publication_id: publicationId,
       categories: results[0].categories,
       mermaid_code: results[0].mermaid_code,
       languages: Object.keys(groupedTranslations),
@@ -79,7 +79,7 @@ app.get("/api/data/:publication_id", (req, res) => {
   });
 });
 
-const basePath = "../data/audio/";
+const basePath = "../data/audio-en/";
 
 app.get("/api/audio/:language/:publication_id", (req, res) => {
   const language = req.params.language;
