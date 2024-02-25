@@ -90,9 +90,11 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
 
       <div className="flex justify-between items-center mt-12">
         <div className="w-full">
-          <Switch color="default" onChange={handleVisible}>
-            Bionic Reading
-          </Switch>
+          {currentLanguage === "English" && (
+            <Switch color="default" onChange={handleVisible}>
+              Bionic Reading
+            </Switch>
+          )}
         </div>
         <div className="flex gap-16 justify-end items-center w-full">
           <div className="w-[50%]">
@@ -159,8 +161,10 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
         data?.translations?.Bosnian &&
         data.translations.Bosnian.length > 0 ? (
         <MarkdownPreview source={data?.translations.Bosnian[0].content} />
-      ) : (
+      ) : !isVisible ? (
         <MarkdownPreview source={data?.description} />
+      ) : (
+        ""
       )}
     </div>
   );
