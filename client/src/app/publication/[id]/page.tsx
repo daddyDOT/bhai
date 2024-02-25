@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { PublicCardInterface } from "@/app/utils/data";
 import { useParams } from "next/navigation";
 
-const page = () => {
+const Page = () => {
   const params = useParams();
 
   const [data, setData] = useState<PublicCardInterface | undefined>(undefined);
@@ -39,12 +39,12 @@ const page = () => {
             alloys for special purposes
           </BreadcrumbItem>
         </Breadcrumbs>
-        <Link href="/publication" className="flex items-center gap-2 font-bold">
+        <a href="/publication" className="flex items-center gap-2 font-bold">
           <span className="font-normal">
             <SlArrowLeft />{" "}
           </span>{" "}
           Nazad
-        </Link>
+        </a>
       </div>
       <div>
         <DetailCardExample data={data} />
@@ -53,4 +53,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

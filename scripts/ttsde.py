@@ -1,7 +1,6 @@
 import os
 import mysql.connector
 from gtts import gTTS
-from playsound import playsound
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -24,11 +23,11 @@ def text_to_speech(text, output_file_path):
 
 def process_publications():
     # Define the directory where MP3 files will be saved
-    audio_directory = Path(__file__).parent / "../data/audio-de"
+    audio_directory = Path(__file__).parent / "../data/audio-German"
     audio_directory.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists
     
     # Execute a query to fetch data from the database
-    select_query = "SELECT publication_id, content FROM translations WHERE language = 'German';"
+    select_query = "SELECT publications.publication_id, content FROM translations INNER JOIN publications ON publications.id = translations.publication_id WHERE translations.language = 'German';"
     cursor.execute(select_query)
     all_publications = cursor.fetchall()
     

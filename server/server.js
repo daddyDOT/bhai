@@ -14,7 +14,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root",
+  password: "",
   database: "bhaaas",
 });
 
@@ -83,14 +83,13 @@ app.get("/api/data/:publication_id", (req, res) => {
   });
 });
 
-const basePath = "../data/audio-en/";
 
 app.get("/api/audio/:language/:publication_id", (req, res) => {
   const language = req.params.language;
   const publicationId = req.params.publication_id;
 
-  const filePath = path.join(__dirname, basePath, `${publicationId}.mp3`);
-
+  const filePath = path.join(__dirname, `../data/audio-${language}/`, `${publicationId}.mp3`);
+  console.log(filePath)
   res.sendFile(filePath, (err) => {
     if (err) {
       res.status(404).send("File not found");

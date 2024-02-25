@@ -1,14 +1,11 @@
 import mysql.connector
 import os
-from dotenv import load_dotenv
-from pathlib import Path
-import json
+from dotenv import load_dotenv 
 import re
 
 load_dotenv()
 
-
-# Database connection setup
+ 
 connection = mysql.connector.connect(
     host=os.getenv("DB_HOST"),
     user=os.getenv("DB_USER"),
@@ -26,20 +23,17 @@ for publication_id, description in publications:
     if not description:
         print(f"Description is empty for publication {publication_id}. Skipping.")
         continue
-
-    # Split the description into lines
+ 
     lines = description.split('\n')
     new_words = []
     new_text = ""
     new_text2 = ""
 
-    for line in lines:
-        # Skip lines that start with a '#' (headers)
+    for line in lines: 
         if line.startswith('#'):
             new_text += "\n" + line + '\n'
             continue
-        else:    
-            # Remove commas from the line
+        else:     
             line = line.replace(",", "")
             words = line.split()    
 
@@ -58,29 +52,14 @@ for publication_id, description in publications:
                         second_half = word[1 + half_length:]   
                         new_word = f"**{first_half}**{second_half}"
                         new_words.append(new_word)
-                else:
-                    # If the word does not match the criteria, add it as is
+                else: 
                     new_words.append(word)
             new_text2 = " ".join(new_words)
             new_text += new_text2
             new_words =  []
     
         
-    
-    # Here you can update the database with new_text for the given publication_id
+     
     sql = "UPDATE publications SET bionic_description = %s WHERE publication_id = %s;"
     cursor.execute(sql, (new_text, publication_id))
-    connection.commit()
-    
-
-
-
-# NACIN NA KOJI SE PRIMA MARKDOWN:
-
-#    <div id="markdown">*bea*utiful</div> --- tekst
-#    <script>
-#        document.addEventListener("DOMContentLoaded", function() {
-#            var markdownElement = document.getElementById("markdown");
-#            markdownElement.innerHTML = markdownElement.innerHTML.replace(/\*([^*]+)\*/g, "<strong>$1</strong>");
-#        });
-#    </script> 
+    connection.commit() 

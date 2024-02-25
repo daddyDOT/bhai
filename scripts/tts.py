@@ -1,7 +1,5 @@
 import os
 import mysql.connector
-import openai
-from openai import OpenAI
 from pathlib import Path
 from dotenv import load_dotenv
 import json
@@ -9,7 +7,7 @@ import json
 load_dotenv()
 
 # Initialize the OpenAI client
-client = openai.OpenAI(api_key='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')
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Database connection setup
 connection = mysql.connector.connect(
@@ -43,7 +41,7 @@ def process_publications():
     publications = cursor.fetchall()
     
     # Define the directory where MP3 files will be saved
-    audio_directory = Path(__file__).parent / "../data/audio-en"
+    audio_directory = Path(__file__).parent / "../data/audio-English"
     audio_directory.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists
     
     for publication_id, description in publications:

@@ -4,13 +4,14 @@ import React, { useState } from "react";
 import { Switch } from "@nextui-org/react";
 import { CiCalendar } from "react-icons/ci";
 import { FaRegClock } from "react-icons/fa6";
+//@ts-ignore
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import { Select, SelectItem, Avatar } from "@nextui-org/react";
 import { PublicCardInterface } from "@/app/utils/data";
 import { useEffect } from "react";
 import mermaid from "mermaid";
 import MarkdownPreview from "@uiw/react-markdown-preview";
-import { GiSpeaker, GiSpeakerOff } from "react-icons/gi";
+import { IoIosPause, IoIosPlay } from "react-icons/io";
 
 interface ItemCardProps {
   data: PublicCardInterface | undefined;
@@ -19,7 +20,24 @@ interface ItemCardProps {
 const DetailCardExample = ({ data }: ItemCardProps) => {
   const [currentLanguage, setCurrentLanguage] = useState("English");
   const [audioSrc, setAudioSrc] = useState("");
-  const [playingTranslation, setPlayingTranslation] = useState(false);
+  const [muteTranslation, setMuteTranslation] = useState(false);
+  const audioRef = React.useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const playAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.play();
+      setIsPlaying(true);
+      console.log("first");
+    }
+  };
+
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
 
   useEffect(() => {
     mermaid.initialize({ startOnLoad: true });
@@ -50,7 +68,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
   }
 
   console.log(data);
-  console.log(playingTranslation);
+  console.log(muteTranslation);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,24 +89,19 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
       }
     };
 
-    if (data) {
-      fetchData();
-    }
+    fetchData();
   }, [data, currentLanguage, data?.publication_id]);
-
-  const handleCountrySelect = (e: any) => {
-    console.log("Changed");
-  };
 
   return (
     <div className="p-6 bg-[#fff] rounded-md flex flex-col mt-8">
-      {data && (
+      {audioSrc && (
         <audio
+          ref={audioRef}
           autoPlay={false}
-          muted={!playingTranslation}
-          src={audioSrc}
-        ></audio>
+          muted={muteTranslation}
+          src={audioSrc}></audio>
       )}
+
       <div className="flex flex-col text-center">
         <h3 className="font-bold text-2xl text-primaryColor">{data?.title}</h3>
         <h4 className="font-bold text-[#777] pt-2">{data?.subtitle}</h4>
@@ -126,7 +139,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
       <div className="flex justify-between items-center mt-12">
         <div className="w-full">
           {currentLanguage === "English" && (
-            <Switch color="default" onChange={handleVisible}>
+            <Switch color="primary" onChange={handleVisible}>
               Bionic Reading
             </Switch>
           )}
@@ -136,9 +149,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
             <Select
               placeholder="Select a language"
               variant="underlined"
-              labelPlacement="outside"
-              onChange={handleCountrySelect}
-            >
+              labelPlacement="outside">
               <SelectItem
                 key="English"
                 onClick={() => setCurrentLanguage("English")}
@@ -148,8 +159,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
                     className="w-6 h-6"
                     src={`/English.webp`}
                   />
-                }
-              >
+                }>
                 English
               </SelectItem>
               {
@@ -164,8 +174,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
                           className="w-6 h-6"
                           src={`/${language}.webp`}
                         />
-                      }
-                    >
+                      }>
                       {language}
                     </SelectItem>
                   ) : null
@@ -173,11 +182,13 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
               }
             </Select>
           </div>
-          <div onClick={() => setPlayingTranslation(!playingTranslation)}>
+          <div onClick={isPlaying ? stopAudio : playAudio} >
             <span className="cursor-pointer pt-3 text-3xl">
-              {!playingTranslation ? <GiSpeaker /> : <GiSpeakerOff />}
+              {isPlaying ? <IoIosPause /> : <IoIosPlay />}
             </span>
           </div>
+          {/*<button onClick={playAudio}>Play Audio</button>
+          <button onClick={stopAudio}>Stop Audio</button> */}
         </div>
       </div>
       <hr className="mt-4 mb-8" />
