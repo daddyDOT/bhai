@@ -17,6 +17,8 @@ interface ItemCardProps {
 }
 
 const DetailCardExample = ({ data }: ItemCardProps) => {
+  const [curentLanguage, setCurrentLanguage] = useState("English");
+
   useEffect(() => {
     mermaid.initialize({ startOnLoad: true });
     mermaid.init(undefined, document.querySelectorAll(".mermaid"));
@@ -43,6 +45,8 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
   if (data?.description) {
     readingTime = calculateReadingTime(data?.description);
   }
+
+  console.log(data);
 
   return (
     <div className="p-6 bg-[#fff] rounded-md flex flex-col mt-8">
@@ -91,40 +95,40 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
             <Select
               placeholder="Select a language"
               variant="underlined"
-              labelPlacement="outside">
+              labelPlacement="outside"
+            >
               <SelectItem
-                key="english"
+                key="English"
+                onClick={() => setCurrentLanguage("English")}
                 startContent={
                   <Avatar
                     alt="English"
                     className="w-6 h-6"
-                    src="https://flagpedia.net/data/flags/w702/us.webp"
+                    src={`/English.webp`}
                   />
-                }>
+                }
+              >
                 English
               </SelectItem>
-              <SelectItem
-                key="bosnian"
-                startContent={
-                  <Avatar
-                    alt="Bosnian"
-                    className="w-6 h-6"
-                    src="https://flagpedia.net/data/flags/w702/ba.webp"
-                  />
-                }>
-                Bosnian
-              </SelectItem>
-              <SelectItem
-                key="german"
-                startContent={
-                  <Avatar
-                    alt="German"
-                    className="w-6 h-6"
-                    src="https://flagpedia.net/data/flags/w702/de.webp"
-                  />
-                }>
-                German
-              </SelectItem>
+              {
+                (data?.languages ?? []).map((language) =>
+                  language ? (
+                    <SelectItem
+                      key={language}
+                      onClick={() => setCurrentLanguage(language)}
+                      startContent={
+                        <Avatar
+                          alt={language}
+                          className="w-6 h-6"
+                          src={`/${language}.webp`}
+                        />
+                      }
+                    >
+                      {language}
+                    </SelectItem>
+                  ) : null
+                ) as any
+              }
             </Select>
           </div>
           <div>

@@ -62,6 +62,8 @@ export interface PublicCardInterface {
   description: string;
   subtitle: string;
   publication_id: string;
+  languages: string[];
   bionic_description: string,
-  mermaid_code: string
+  mermaid_code: string;
+  translations: object[];
 }
