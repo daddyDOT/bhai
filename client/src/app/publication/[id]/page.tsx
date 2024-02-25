@@ -3,10 +3,29 @@
 import Link from "next/link";
 import { SlArrowLeft } from "react-icons/sl";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
-import DetailCard from "@/components/DetailCard";
 import { detailCardData } from "@/app/utils/data";
+import DetailCardExample from "@/components/DetailsCardExample";
+import { useEffect, useState } from "react";
+import { PublicCardInterface } from "@/app/utils/data";
+import { useParams } from "next/navigation";
 
 const page = () => {
+  const params = useParams();
+
+  const [data, setData] = useState<PublicCardInterface | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchPublication = async () => {
+      const res = await fetch(`http://localhost:5000/api/data/${params.id}`);
+      const data = await res.json();
+
+      console.log(data);
+
+      setData(data);
+    };
+
+    fetchPublication();
+  }, []);
   return (
     <section
       id="publication-details"
@@ -28,7 +47,7 @@ const page = () => {
         </Link>
       </div>
       <div>
-        <DetailCard data={detailCardData} />
+        <DetailCardExample data={data} />
       </div>
     </section>
   );

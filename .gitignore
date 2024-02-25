@@ -1,2 +1,5 @@
-./server/node_modules
+.env
+node_modules
+
 ./scripts/.env
+./server/node_modules
