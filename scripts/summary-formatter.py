@@ -5,7 +5,7 @@ import mysql.connector
 
 load_dotenv()
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def format_description(description):
     response = client.chat.completions.create(
