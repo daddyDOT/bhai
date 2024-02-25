@@ -39,12 +39,12 @@ const page = () => {
             alloys for special purposes
           </BreadcrumbItem>
         </Breadcrumbs>
-        <Link href="/publication" className="flex items-center gap-2 font-bold">
+        <a href="/publication" className="flex items-center gap-2 font-bold">
           <span className="font-normal">
             <SlArrowLeft />{" "}
           </span>{" "}
           Nazad
-        </Link>
+        </a>
       </div>
       <div>
         <DetailCardExample data={data} />
