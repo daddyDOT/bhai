@@ -27,7 +27,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
     .replace(/```mermaid/g, "")
     .replace(/```/g, "");
 
-  console.log(cleanedMermaid);
+  console.log(data?.mermaid_code);
   return (
     <div className="p-6 bg-[#fff] rounded-md flex flex-col mt-8">
       <div className="flex flex-col text-center">
@@ -36,11 +36,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
       </div>
       <div className="flex justify-center items-center flex-col">
         <div className="mt-4 w-[900px]">
-          <Mermaid
-            chart={`${data?.mermaid_code
-              .replace("```mermaid", ``)
-              .replace("```", "")}`}
-          />
+          <Mermaid chart={data?.mermaid_code} />
         </div>
 
         <div className="flex gap-12 mt-6">
