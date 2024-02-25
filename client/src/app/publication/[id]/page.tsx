@@ -8,6 +8,7 @@ import DetailCardExample from "@/components/DetailsCardExample";
 import { useEffect, useState } from "react";
 import { PublicCardInterface } from "@/app/utils/data";
 import { useParams } from "next/navigation";
+import Markdown from "react-markdown";
 
 const page = () => {
   const params = useParams();

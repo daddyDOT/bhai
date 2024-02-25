@@ -9,25 +9,25 @@ import { FaRegEyeSlash } from "react-icons/fa";
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import { Select, SelectItem, Avatar } from "@nextui-org/react";
 import { PublicCardInterface } from "@/app/utils/data";
+import Markdown from "react-markdown";
+import { useEffect } from "react";
+import mermaid from "mermaid";
 
 interface ItemCardProps {
   data: PublicCardInterface | undefined;
 }
 
 const DetailCardExample = ({ data }: ItemCardProps) => {
+  useEffect(() => {
+    mermaid.initialize({ startOnLoad: true });
+    mermaid.init(undefined, document.querySelectorAll(".mermaid"));
+  }, []);
   const [isVisible, setIsVisible] = useState(false);
 
   const handleVisible = () => {
     setIsVisible(!isVisible);
   };
 
-  const pattern = /'([^']*)'/g;
-
-  const cleanedMermaid = data?.mermaid_code
-    .replace(/```mermaid/g, "")
-    .replace(/```/g, "");
-
-  console.log(data?.mermaid_code);
   return (
     <div className="p-6 bg-[#fff] rounded-md flex flex-col mt-8">
       <div className="flex flex-col text-center">
@@ -36,7 +36,11 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
       </div>
       <div className="flex justify-center items-center flex-col">
         <div className="mt-4 w-[900px]">
-          <Mermaid chart={data?.mermaid_code} />
+          {data?.mermaid_code ? (
+            <Mermaid className="mermaid" chart={data?.mermaid_code} />
+          ) : (
+            ""
+          )}
         </div>
 
         <div className="flex gap-12 mt-6">
@@ -115,7 +119,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
         </div>
       </div>
       <hr className="mt-2" />
-      <p className="mt-4">{data?.description}</p>
+      <Markdown>{data?.description}</Markdown>
     </div>
   );
 };
