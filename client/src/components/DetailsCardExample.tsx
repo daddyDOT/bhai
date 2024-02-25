@@ -17,7 +17,7 @@ interface ItemCardProps {
 }
 
 const DetailCardExample = ({ data }: ItemCardProps) => {
-  const [curentLanguage, setCurrentLanguage] = useState("English");
+  const [currentLanguage, setCurrentLanguage] = useState("English");
 
   useEffect(() => {
     mermaid.initialize({ startOnLoad: true });
@@ -47,6 +47,10 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
   }
 
   console.log(data);
+
+  const handleCountrySelect = (e: any) => {
+    console.log("Changed");
+  };
 
   return (
     <div className="p-6 bg-[#fff] rounded-md flex flex-col mt-8">
@@ -96,7 +100,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
               placeholder="Select a language"
               variant="underlined"
               labelPlacement="outside"
-            >
+              onChange={handleCountrySelect}>
               <SelectItem
                 key="English"
                 onClick={() => setCurrentLanguage("English")}
@@ -106,8 +110,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
                     className="w-6 h-6"
                     src={`/English.webp`}
                   />
-                }
-              >
+                }>
                 English
               </SelectItem>
               {
@@ -122,8 +125,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
                           className="w-6 h-6"
                           src={`/${language}.webp`}
                         />
-                      }
-                    >
+                      }>
                       {language}
                     </SelectItem>
                   ) : null
@@ -139,14 +141,24 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
         </div>
       </div>
       <hr className="mt-4 mb-8" />
-      {isVisible && result ? (
+      {currentLanguage === "English" &&
+        isVisible &&
+        result &&
         result.map((res, i) => (
           <div key={i}>
             <MarkdownPreview source={res} />
             <br />
             <br />
           </div>
-        ))
+        ))}
+      {currentLanguage === "German" &&
+      data?.translations?.German &&
+      data.translations.German.length > 0 ? (
+        <MarkdownPreview source={data.translations.German[0].content} />
+      ) : currentLanguage === "Bosnian" &&
+        data?.translations?.Bosnian &&
+        data.translations.Bosnian.length > 0 ? (
+        <MarkdownPreview source={data?.translations.Bosnian[0].content} />
       ) : (
         <MarkdownPreview source={data?.description} />
       )}
