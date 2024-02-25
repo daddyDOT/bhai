@@ -9,9 +9,9 @@ import { FaRegEyeSlash } from "react-icons/fa";
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import { Select, SelectItem, Avatar } from "@nextui-org/react";
 import { PublicCardInterface } from "@/app/utils/data";
-import Markdown from "react-markdown";
 import { useEffect } from "react";
 import mermaid from "mermaid";
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 interface ItemCardProps {
   data: PublicCardInterface | undefined;
@@ -27,6 +27,11 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
   const handleVisible = () => {
     setIsVisible(!isVisible);
   };
+  let result;
+  if (isVisible && data)
+  {
+    result = data.bionic_description.split("\\n\\n");
+  }
 
   return (
     <div className="p-6 bg-[#fff] rounded-md flex flex-col mt-8">
@@ -119,7 +124,14 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
         </div>
       </div>
       <hr className="mt-2" />
-      <Markdown>{data?.description}</Markdown>
+      {isVisible && result ? result.map((res, i) => (
+        <div key={i}>
+          <MarkdownPreview source={res} />
+          <br />
+          <br />
+        </div>
+      )) :
+      <MarkdownPreview source={data?.description} />}
     </div>
   );
 };
