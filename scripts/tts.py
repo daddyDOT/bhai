@@ -43,7 +43,7 @@ def process_publications():
     publications = cursor.fetchall()
     
     # Define the directory where MP3 files will be saved
-    audio_directory = Path(__file__).parent / "../data/audio"
+    audio_directory = Path(__file__).parent / "../data/audio-en"
     audio_directory.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists
     
     for publication_id, description in publications:

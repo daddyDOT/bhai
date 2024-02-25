@@ -18,17 +18,17 @@ cursor = connection.cursor()
 
 def text_to_speech(text, output_file_path):
     # Convert text to speech using gtts
-    tts = gTTS(text=text, lang='bs')  #Bosnian
+    tts = gTTS(text=text, lang='de')  #Bosnian
     tts.save(output_file_path)
     print(f"Text-to-speech conversion complete. Output saved to {output_file_path}")
 
 def process_publications():
     # Define the directory where MP3 files will be saved
-    audio_directory = Path(__file__).parent / "../data/audio-bs"
+    audio_directory = Path(__file__).parent / "../data/audio-de"
     audio_directory.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists
     
     # Execute a query to fetch data from the database
-    select_query = "SELECT publication_id, content FROM translations WHERE language = 'Bosnian';"
+    select_query = "SELECT publication_id, content FROM translations WHERE language = 'German';"
     cursor.execute(select_query)
     all_publications = cursor.fetchall()
     
