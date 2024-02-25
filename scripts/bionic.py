@@ -35,17 +35,19 @@ for publication_id, description in publications:
     lines = description.split('\n')
     new_words = []
     new_text = ""
+    new_text2 = ""
 
     for line in lines:
         # Skip lines that start with a '#' (headers)
         if line.startswith('#'):
-            new_text = new_text + '\n' + line + '\n'
+            new_text += "\n" + line + '\n'
             continue
         else:    
             # Remove commas from the line
             line = line.replace(",", "")
             words = line.split()    
 
+            print("\n")
             for word in words:
                 if re.match(r'^[a-zA-Z0-9.]+$', word):
                     if len(word) %   2 ==   0:
@@ -63,8 +65,12 @@ for publication_id, description in publications:
                 else:
                     # If the word does not match the criteria, add it as is
                     new_words.append(word)
-        new_text2 = " ".join(new_words)
-        new_text += new_text2
+            new_text2 = " ".join(new_words)
+            new_text += new_text2
+            new_words =  []
+    
+        
+    
     # Here you can update the database with new_text for the given publication_id
     sql = "UPDATE publications SET bionic_description = %s WHERE publication_id = %s;"
     cursor.execute(sql, (new_text, publication_id))
