@@ -11,7 +11,7 @@ import { Select, SelectItem, Avatar } from "@nextui-org/react";
 import { PublicCardInterface } from "@/app/utils/data";
 import { useEffect } from "react";
 import mermaid from "mermaid";
-import MarkdownPreview from '@uiw/react-markdown-preview';
+import MarkdownPreview from "@uiw/react-markdown-preview";
 
 interface ItemCardProps {
   data: PublicCardInterface | undefined;
@@ -28,8 +28,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
     setIsVisible(!isVisible);
   };
   let result;
-  if (isVisible && data)
-  {
+  if (isVisible && data) {
     result = data.bionic_description.split("\\n\\n");
   }
 
@@ -81,16 +80,18 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
             <Select
               placeholder="Select a language"
               variant="underlined"
-              labelPlacement="outside">
+              labelPlacement="outside"
+            >
               <SelectItem
                 key="english"
                 startContent={
                   <Avatar
                     alt="English"
                     className="w-6 h-6"
-                    src="https://flagpedia.net/data/flags/w702/gb-eng.webp"
+                    src="https://flagpedia.net/data/flags/w702/us.webp"
                   />
-                }>
+                }
+              >
                 English
               </SelectItem>
               <SelectItem
@@ -101,8 +102,21 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
                     className="w-6 h-6"
                     src="https://flagpedia.net/data/flags/w702/ba.webp"
                   />
-                }>
+                }
+              >
                 Bosnian
+              </SelectItem>
+              <SelectItem
+                key="german"
+                startContent={
+                  <Avatar
+                    alt="German"
+                    className="w-6 h-6"
+                    src="https://flagpedia.net/data/flags/w702/de.webp"
+                  />
+                }
+              >
+                German
               </SelectItem>
             </Select>
           </div>
@@ -110,13 +124,15 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
             {isVisible ? (
               <span
                 onClick={handleVisible}
-                className="cursor-pointer pt-3 text-2xl">
+                className="cursor-pointer pt-3 text-2xl"
+              >
                 <FaRegEye />
               </span>
             ) : (
               <span
                 onClick={handleVisible}
-                className="cursor-pointer pt-3 text-2xl">
+                className="cursor-pointer pt-3 text-2xl"
+              >
                 <FaRegEyeSlash />
               </span>
             )}
@@ -124,14 +140,17 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
         </div>
       </div>
       <hr className="mt-2" />
-      {isVisible && result ? result.map((res, i) => (
-        <div key={i}>
-          <MarkdownPreview source={res} />
-          <br />
-          <br />
-        </div>
-      )) :
-      <MarkdownPreview source={data?.description} />}
+      {isVisible && result ? (
+        result.map((res, i) => (
+          <div key={i}>
+            <MarkdownPreview source={res} />
+            <br />
+            <br />
+          </div>
+        ))
+      ) : (
+        <MarkdownPreview source={data?.description} />
+      )}
     </div>
   );
 };
