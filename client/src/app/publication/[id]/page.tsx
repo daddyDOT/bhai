@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { PublicCardInterface } from "@/app/utils/data";
 import { useParams } from "next/navigation";
 
-const page = () => {
+const Page = () => {
   const params = useParams();
 
   const [data, setData] = useState<PublicCardInterface | undefined>(undefined);
@@ -53,4 +53,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

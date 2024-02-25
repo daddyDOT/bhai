@@ -4,13 +4,14 @@ import React, { useState } from "react";
 import { Switch } from "@nextui-org/react";
 import { CiCalendar } from "react-icons/ci";
 import { FaRegClock } from "react-icons/fa6";
+//@ts-ignore
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import { Select, SelectItem, Avatar } from "@nextui-org/react";
 import { PublicCardInterface } from "@/app/utils/data";
 import { useEffect } from "react";
 import mermaid from "mermaid";
 import MarkdownPreview from "@uiw/react-markdown-preview";
-import { GiSpeaker, GiSpeakerOff } from "react-icons/gi";
+import { IoIosPause, IoIosPlay } from "react-icons/io";
 
 interface ItemCardProps {
   data: PublicCardInterface | undefined;
@@ -21,16 +22,20 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
   const [audioSrc, setAudioSrc] = useState("");
   const [muteTranslation, setMuteTranslation] = useState(false);
   const audioRef = React.useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const playAudio = () => {
     if (audioRef.current) {
       audioRef.current.play();
+      setIsPlaying(true);
+      console.log("first");
     }
   };
 
   const stopAudio = () => {
     if (audioRef.current) {
       audioRef.current.pause();
+      setIsPlaying(false);
     }
   };
 
@@ -177,13 +182,13 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
               }
             </Select>
           </div>
-          <div onClick={() => setMuteTranslation(!muteTranslation)}>
+          <div onClick={isPlaying ? stopAudio : playAudio} >
             <span className="cursor-pointer pt-3 text-3xl">
-              {!muteTranslation ? <GiSpeaker /> : <GiSpeakerOff />}
+              {isPlaying ? <IoIosPause /> : <IoIosPlay />}
             </span>
           </div>
-          <button onClick={playAudio}>Play Audio</button>
-          <button onClick={stopAudio}>Stop Audio</button>
+          {/*<button onClick={playAudio}>Play Audio</button>
+          <button onClick={stopAudio}>Stop Audio</button> */}
         </div>
       </div>
       <hr className="mt-4 mb-8" />

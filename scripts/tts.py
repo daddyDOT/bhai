@@ -1,7 +1,5 @@
 import os
 import mysql.connector
-import openai
-from openai import OpenAI
 from pathlib import Path
 from dotenv import load_dotenv
 import json
