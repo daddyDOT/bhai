@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import { Switch } from "@nextui-org/react";
 import { CiCalendar } from "react-icons/ci";
 import { FaRegClock } from "react-icons/fa6";
-import { FaRegEye } from "react-icons/fa";
-import { FaRegEyeSlash } from "react-icons/fa";
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import { Select, SelectItem, Avatar } from "@nextui-org/react";
 import { PublicCardInterface } from "@/app/utils/data";
@@ -133,19 +131,6 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
             <span className="cursor-pointer pt-3 text-3xl">
               <GiSpeaker />
             </span>
-            {isVisible ? (
-              <span
-                onClick={handleVisible}
-                className="cursor-pointer pt-3 text-2xl">
-                <FaRegEye />
-              </span>
-            ) : (
-              <span
-                onClick={handleVisible}
-                className="cursor-pointer pt-3 text-2xl">
-                <FaRegEyeSlash />
-              </span>
-            )}
           </div>
         </div>
       </div>
