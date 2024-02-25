@@ -10,7 +10,7 @@ import { publicCard } from "../utils/data";
 import { useEffect, useState } from "react";
 import { PublicCardInterface } from "../utils/data";
 
-const page = () => {
+const Page = () => {
   const [data, setData] = useState<PublicCardInterface[] | undefined>(
     undefined
   );
@@ -61,4 +61,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
