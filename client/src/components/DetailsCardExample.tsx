@@ -10,7 +10,7 @@ import { PublicCardInterface } from "@/app/utils/data";
 import { useEffect } from "react";
 import mermaid from "mermaid";
 import MarkdownPreview from "@uiw/react-markdown-preview";
-import { GiSpeaker } from "react-icons/gi";
+import { GiSpeaker, GiSpeakerOff } from "react-icons/gi";
 
 interface ItemCardProps {
   data: PublicCardInterface | undefined;
@@ -18,6 +18,21 @@ interface ItemCardProps {
 
 const DetailCardExample = ({ data }: ItemCardProps) => {
   const [currentLanguage, setCurrentLanguage] = useState("English");
+  const [audioSrc, setAudioSrc] = useState("");
+  const [muteTranslation, setMuteTranslation] = useState(false);
+  const audioRef = React.useRef<HTMLAudioElement>(null);
+
+  const playAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.play();
+    }
+  };
+
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+  };
 
   useEffect(() => {
     mermaid.initialize({ startOnLoad: true });
@@ -29,6 +44,7 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
   const handleVisible = () => {
     setIsVisible(!isVisible);
   };
+
   let result;
   if (isVisible && data) {
     result = data.bionic_description.split("\\n\\n");
@@ -47,13 +63,40 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
   }
 
   console.log(data);
+  console.log(muteTranslation);
 
-  const handleCountrySelect = (e: any) => {
-    console.log("Changed");
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/audio/${currentLanguage}/${data?.publication_id}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        setAudioSrc(blobUrl);
+      } catch (error) {
+        console.error("Error fetching audio:", error);
+      }
+    };
+
+    fetchData();
+  }, [data, currentLanguage, data?.publication_id]);
 
   return (
     <div className="p-6 bg-[#fff] rounded-md flex flex-col mt-8">
+      {audioSrc && (
+        <audio
+          ref={audioRef}
+          autoPlay={false}
+          muted={muteTranslation}
+          src={audioSrc}></audio>
+      )}
+
       <div className="flex flex-col text-center">
         <h3 className="font-bold text-2xl text-primaryColor">{data?.title}</h3>
         <h4 className="font-bold text-[#777] pt-2">{data?.subtitle}</h4>
@@ -90,17 +133,18 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
 
       <div className="flex justify-between items-center mt-12">
         <div className="w-full">
-          <Switch color="default" onChange={handleVisible}>
-            Bionic Reading
-          </Switch>
+          {currentLanguage === "English" && (
+            <Switch color="primary" onChange={handleVisible}>
+              Bionic Reading
+            </Switch>
+          )}
         </div>
         <div className="flex gap-16 justify-end items-center w-full">
           <div className="w-[50%]">
             <Select
               placeholder="Select a language"
               variant="underlined"
-              labelPlacement="outside"
-              onChange={handleCountrySelect}>
+              labelPlacement="outside">
               <SelectItem
                 key="English"
                 onClick={() => setCurrentLanguage("English")}
@@ -133,11 +177,13 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
               }
             </Select>
           </div>
-          <div>
+          <div onClick={() => setMuteTranslation(!muteTranslation)}>
             <span className="cursor-pointer pt-3 text-3xl">
-              <GiSpeaker />
+              {!muteTranslation ? <GiSpeaker /> : <GiSpeakerOff />}
             </span>
           </div>
+          <button onClick={playAudio}>Play Audio</button>
+          <button onClick={stopAudio}>Stop Audio</button>
         </div>
       </div>
       <hr className="mt-4 mb-8" />
@@ -159,8 +205,10 @@ const DetailCardExample = ({ data }: ItemCardProps) => {
         data?.translations?.Bosnian &&
         data.translations.Bosnian.length > 0 ? (
         <MarkdownPreview source={data?.translations.Bosnian[0].content} />
-      ) : (
+      ) : !isVisible ? (
         <MarkdownPreview source={data?.description} />
+      ) : (
+        ""
       )}
     </div>
   );

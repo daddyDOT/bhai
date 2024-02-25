@@ -10,7 +10,7 @@ app.use(cors());
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root",
+  password: "",
   database: "bhaaas",
 });
 
@@ -68,7 +68,7 @@ app.get("/api/data/:publication_id", (req, res) => {
       cite_number: results[0].cite_number,
       bionic_description: results[0].bionic_description,
       pdf_source: results[0].pdf_source,
-      publication_id: results[0].publication_id,
+      publication_id: publicationId,
       categories: results[0].categories,
       mermaid_code: results[0].mermaid_code,
       languages: Object.keys(groupedTranslations),
@@ -79,14 +79,13 @@ app.get("/api/data/:publication_id", (req, res) => {
   });
 });
 
-const basePath = "../data/audio/";
 
 app.get("/api/audio/:language/:publication_id", (req, res) => {
   const language = req.params.language;
   const publicationId = req.params.publication_id;
 
-  const filePath = path.join(__dirname, basePath, `${publicationId}.mp3`);
-
+  const filePath = path.join(__dirname, `../data/audio-${language}/`, `${publicationId}.mp3`);
+  console.log(filePath)
   res.sendFile(filePath, (err) => {
     if (err) {
       res.status(404).send("File not found");

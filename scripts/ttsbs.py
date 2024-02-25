@@ -28,7 +28,7 @@ def process_publications():
     audio_directory.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists
     
     # Execute a query to fetch data from the database
-    select_query = "SELECT publication_id, content FROM translations WHERE language = 'Bosnian';"
+    select_query = "SELECT publications.publication_id, content FROM translations INNER JOIN publications ON publications.publication_id = translations.publication_id WHERE translations.language = 'Bosnian';"
     cursor.execute(select_query)
     all_publications = cursor.fetchall()
     
