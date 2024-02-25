@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.9",
+    "@uiw/react-markdown-preview": "^5.0.7",
     "framer-motion": "^11.0.6",
     "mdx-mermaid": "^2.0.0",
     "mermaid": "^10.8.0",
